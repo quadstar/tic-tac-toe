@@ -19,31 +19,29 @@ var Square = React.createClass({
 
 var Main = React.createClass({
   getInitialState: function(){
-    return {turn: 'X'};
+    return {
+      turn: 'X',
+      rows: [[0,0,0],[0,0,0],[0,0,0]]
+    };
   },
   clickSquare: function(event){
     console.log('Clicked square #', event.target.id);
   },
   render: function(){
+    var clickfn = this.clickSquare;
     return (
       <div>
-        <div id='row'>
-          <Square clickSquare={this.clickSquare} id='1'/>
-          <Square clickSquare={this.clickSquare} id='2'/>
-          <Square clickSquare={this.clickSquare} id='3'/>
-        </div>
-        <div id='row'>
-          <Square clickSquare={this.clickSquare} id='4'/>
-          <Square clickSquare={this.clickSquare} id='5'/>
-          <Square clickSquare={this.clickSquare} id='6'/>
-        </div>
-        <div id='row'>
-          <Square clickSquare={this.clickSquare} id='7'/>
-          <Square clickSquare={this.clickSquare} id='8'/>
-          <Square clickSquare={this.clickSquare} id='9'/>
-        </div>
+        {this.state.rows.map(function(row,rowi){
+          return (
+            <div key={rowi} id='row'>
+            {row.map(function(e,i){
+              return (<Square clickSquare={clickfn} key={rowi*3+i} id={rowi*3+i} />);
+            })}
+            </div> 
+          );
+        })}
       </div>
-    )
+    );
   }
 });
 
