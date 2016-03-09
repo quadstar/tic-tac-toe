@@ -31,11 +31,11 @@ var Main = React.createClass({
     var clickfn = this.clickSquare;
     return (
       <div>
-        {this.state.rows.map(function(row,rowi){
+        {this.state.rows.map(function(row,rowi, c){
           return (
             <div key={rowi} id='row'>
             {row.map(function(e,i){
-              return (<Square clickSquare={clickfn} key={rowi*3+i} id={rowi*3+i} />);
+              return (<Square clickSquare={clickfn} key={rowi*c.length+i} id={rowi*c.length+i} />);
             })}
             </div> 
           );
