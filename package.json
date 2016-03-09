@@ -1,17 +1,17 @@
 {
   "name": "tic-tac-toe",
   "version": "1.0.0",
-  "description": "tic-tac-toe coding challenge for phunware",
+  "description": "tic-tac-toe coding challenge for Phunware",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node index.js",
-    "build": "browserify -t reactify main.js -o bundle.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ian Berg",
   "license": "ISC",
   "dependencies": {
     "browserify": "^13.0.0",
+    "browserify-middleware": "^7.0.0",
     "classnames": "^2.2.3",
     "express": "^4.13.4",
     "jquery": "^2.2.1",
