@@ -16,22 +16,23 @@ var App = React.createClass({
     var col = parseInt(event.target.id[1]);
     var newRows = this.state.rows.slice();
     newRows[row][col] = this.state.turn;
-    // TODO: check for win condition
+    //sends board to server for validation
     $.ajax({
       url: '/api/board-check',
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify({played: event.target.id, rows:newRows}),
       success: function(data){
-        console.log(data);
+        // if no win condition met continue the game
         if(!data){
           this.setState({turn: this.state.turn === 'X' ? 'O' : 'X'});
         }
         else if(data === 'tie'){
           this.setState({status: 'TIE'});
         }
+        // if there is a winner end the game and reveal the win condition.
         else{
-          this.setState({status: 'WIN'});
+          this.setState({status: 'WIN', rows: JSON.parse(data)});
         }
       }.bind(this),
       error: function(xhr, status, err){
@@ -52,19 +53,22 @@ var App = React.createClass({
       }
       rows.push(row);
     }
+    // resets board state
     this.setState({
       turn: 'X',
-      rows: rows
+      rows: rows,
+      status: 'PLAYING'
     });
   },
   render: function(){
     var that = this;
     var headingMessage;
+    var player = this.state.turn === 'X' ? 'Dog' : 'Cat';
     if(this.state.status === 'PLAYING'){
-      headingMessage = this.state.turn + '\'s turn';
+      headingMessage = player + '\'s turn';
     }
     else if(this.state.status === 'WIN'){
-      headingMessage = this.state.turn + ' Wins!';
+      headingMessage = player + ' Wins!';
     }
     else{
       headingMessage = 'It\'s a tie!';
@@ -75,8 +79,14 @@ var App = React.createClass({
         {this.state.rows.map(function(row,rowi, c){
           return (
             <div className='row' key={rowi} id='row'>
-            {row.map(function(e,i){
-              return (<Square marker={e} status={that.state.status} clickSquare={that.clickSquare} key={rowi*c.length+i} id={''+rowi+i} />);
+            {row.map(function(e,i){ 
+              var win = false;
+              var marker = e;
+              if(e === 'W'){
+                win = true;
+                marker = that.state.turn;
+              }
+              return (<Square marker={marker} win={win} status={that.state.status} clickSquare={that.clickSquare} key={rowi*c.length+i} id={''+rowi+i} />);
             })}
             </div> 
           );

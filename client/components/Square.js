@@ -9,14 +9,14 @@ var Square = React.createClass({
     var clickfn, styleClass;
     if(this.props.status === 'PLAYING'){
       clickfn = this.props.marker === ' ' ? this.props.clickSquare : this.clickInvalid;
-      styleClass = classNames('square', this.props.marker === ' ' ? 'empty': 'filled');   
+      styleClass = classNames('square', this.props.marker === ' ' ? 'empty': 'filled', this.props.marker);   
     }
+    // if game is over reveal the win condition
     else{
-      styleClass = classNames('square', this.props.marker === 'W' ? 'winner': 'loser');
+      styleClass = classNames('square', this.props.win ? 'winner': 'loser', this.props.marker);
     }
     return (
       <div className={styleClass} onClick={clickfn} id={this.props.id}>
-        {this.props.marker}
       </div>
     )
   }

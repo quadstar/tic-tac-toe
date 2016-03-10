@@ -1,4 +1,5 @@
 .square{
+  font-size:80px;
   width:100px;
   height:100px;
   float:left;
@@ -7,10 +8,19 @@
   margin:2px;
   padding:5px;
   text-align:center;
+  background-size:cover;
+}
+
+.square.X{
+  background-image:url(dog.gif);
+}
+
+.square.O{
+  background-image:url(cat.png);
 }
 
 .square.winner{
-  border:3px solid green;
+  border:2px solid green;
 }
 
 .square.loser{
@@ -47,4 +57,7 @@
 
 .heading{
   text-align:center;
+  font-size:30px;
 }
+
+

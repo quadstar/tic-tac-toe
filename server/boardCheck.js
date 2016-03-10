@@ -2,7 +2,7 @@ var boardCheck = function(board, placedPiece){
   var player = board[placedPiece[0]][placedPiece[1]];
   var rowWin, colWin, majDiagWin, minDiagWin;
   // check for win conditions
-  rowWin = checkHorizontal(board[placedPiece[0]], player);
+  rowWin = checkHorizontal(board[placedPiece[0]], placedPiece[0], player);
   colWin = checkVertical(placedPiece[1], board, player);
 
   // diagonal win must be from corner to corner
@@ -14,22 +14,49 @@ var boardCheck = function(board, placedPiece){
   if(parseInt(placedPiece[0]) + parseInt(placedPiece[1]) === board.length-1){ 
     minDiagWin = checkMinorDiag(board, player); 
   }
-
-  // if there is not a win condition met check to see if it is a tie.
-  if(!(rowWin || colWin || majDiagWin || minDiagWin || false)){
-    return checkBoardFilled(board);
+  // condition equals the first win condition, tie, or false
+  var condition = rowWin || colWin || majDiagWin || minDiagWin || checkBoardFilled(board);
+  // if there is no winner or a tie return
+  if(!condition || condition === 'tie'){
+    return condition;
   }
-  // if there is a win condition met return true.
-  return true
+  // otherwise we replace the winning markers with 'W' and send back the board
+  var result, winCase = condition.slice(0,3);
+  switch(winCase){
+    case 'maj':
+      for(var i = 0; i < board.length; i++){
+        board[i][i] = 'W'
+      }
+      break;
+    case 'min':
+      for(var i = 0, k = board.length-1; i < board.length; i++,k--){
+        board[i][k] = 'W'
+      }
+      break;
+    case 'col':
+      for(var i = 0; i < board.length; i++){
+        board[i][condition[3]] = 'W'
+      }
+      break;
+    case 'row':
+      for(var i = 0; i < board.length; i++){
+        board[condition[3]][i] = 'W'
+      }
+      break;
+    default: 
+      break;
+  }
+  return JSON.stringify(board);
+
 }
 
-var checkHorizontal = function(row, player){
+var checkHorizontal = function(row, rownum, player){
   for(var i = 0; i < row.length; i++){
     if(row[i] !== player){
       return false;
     }
   }
-  return true;
+  return 'row'+rownum;
 }
 
 var checkVertical = function(col, board, player){
@@ -38,7 +65,7 @@ var checkVertical = function(col, board, player){
       return false;
     }
   }
-  return true;
+  return 'col'+col;
 }
 
 var checkMajorDiag = function(board, player){
@@ -47,7 +74,7 @@ var checkMajorDiag = function(board, player){
       return false;
     }
   }
-  return true;
+  return 'maj';
 }
 
 var checkMinorDiag = function(board, player){
@@ -56,7 +83,7 @@ var checkMinorDiag = function(board, player){
       return false;
     }
   }
-  return true;
+  return 'min';
 }
 
 var checkBoardFilled = function(board){
