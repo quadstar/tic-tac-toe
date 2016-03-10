@@ -64,7 +64,17 @@ var Main = React.createClass({
     var col = parseInt(event.target.id[1]);
     var newRows = this.state.rows.slice();
     newRows[row][col] = this.state.turn;
+    var username = 'dog'
     // TODO: check for win condition
+    $.ajax({
+      url: '/api/board-check',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(newRows),
+      success: function(data){
+        console.log(data);
+      }.bind(this)
+    });
     this.setState({
       turn: this.state.turn === 'X' ? 'O' : 'X',
       rows: newRows

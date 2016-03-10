@@ -3,10 +3,14 @@ var app        = express();
 var port       = process.env.PORT || 8080;
 var browserify = require('browserify-middleware');
 var Path       = require('path');
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
 
 // route to check board for win condition. 
-app.post('./api/board-check', function(req, res){
-
+app.post('/api/board-check', function(req, res){
+  console.log(req.body);
+  res.status(200).send('k man');
 });
 
 // convert jsx to js and bundle files
