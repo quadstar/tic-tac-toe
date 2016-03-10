@@ -1,13 +1,26 @@
 var boardCheck = function(board, placedPiece){
   var player = board[placedPiece[0]][placedPiece[1]];
-  var win = false;
+  var rowWin, colWin, majDiagWin, minDiagWin;
+  // check for win conditions
+  rowWin = checkHorizontal(board[placedPiece[0]], player);
+  colWin = checkVertical(placedPiece[1], board, player);
 
-  var rowWin = checkHorizontal(board[placedPiece[0]], player);
-  var colWin = checkVertical(placedPiece[1], board, player);
-  var majDiagWin = checkMajorDiag(board, player);
-  var minDiagWin = checkMinorDiag(board, player);
+  // diagonal win must be from corner to corner
+  // x and y coordinates along major diagonal are directly proportional
+  if(placedPiece[0] === placedPiece[1]){ 
+    majDiagWin = checkMajorDiag(board, player);
+  }
+  // x and y coordinates along minor diagonal are inversely proportional 
+  if(parseInt(placedPiece[0]) + parseInt(placedPiece[1]) === board.length-1){ 
+    minDiagWin = checkMinorDiag(board, player); 
+  }
 
-  return rowWin || colWin || majDiagWin || minDiagWin || false;
+  // if there is not a win condition met check to see if it is a tie.
+  if(!(rowWin || colWin || majDiagWin || minDiagWin || false)){
+    return checkBoardFilled(board);
+  }
+  // if there is a win condition met return true.
+  return true
 }
 
 var checkHorizontal = function(row, player){
@@ -29,7 +42,6 @@ var checkVertical = function(col, board, player){
 }
 
 var checkMajorDiag = function(board, player){
-
   for(var i = 0; i < board.length; i++){
     if(board[i][i] !== player){
       return false;
@@ -39,7 +51,7 @@ var checkMajorDiag = function(board, player){
 }
 
 var checkMinorDiag = function(board, player){
-  for(var i = 0, k = board.length; i < board.length; i++,k--){
+  for(var i = 0, k = board.length-1; i < board.length; i++,k--){
     if(board[i][k] !== player){
       return false;
     }
@@ -48,8 +60,21 @@ var checkMinorDiag = function(board, player){
 }
 
 var checkBoardFilled = function(board){
-
+  for(var i = 0; i < board.length; i++){
+    for(var k = 0; k < board[i].length; k++){
+      if(board[i][k] === ' '){
+        return false;
+      }
+    }
+  }
+  return 'tie';
 }
+
+module.exports = boardCheck
+
+
+/*
+*BEGIN TEST*
 
 // no win
 var board1 = [ [ ' ', ' ', 'X' ], [ ' ', ' ', ' ' ], [ ' ', ' ', ' ' ] ]
@@ -67,18 +92,19 @@ var board7 = [ [ ' ', ' ', 'X' ], [ ' ', 'X', ' ' ], [ 'X', ' ', ' ' ] ]
 var board4 = [ [ 'X', ' ', ' ' ], [ ' ', 'O', ' ' ], [ ' ', ' ', 'X' ] ]
 
 //tie
-var board5 = [ [ 'X', 'X', 'O' ], [ 'O', 'O', 'X' ], [ 'X', 'O', 'X' ] ]
+var board5 = [ [ 'X', 'X', ' 0' ], [ 'O', 'O', 'X' ], [ 'X', 'O', 'X' ] ]
 
 // x win verical
 var board6 = [ [ ' ', ' ', 'X' ], [ ' ', ' ', 'X' ], [ ' ', ' ', 'X' ] ]
 
+debug(boardCheck(board1, '02')); //=> should equal false
+debug(boardCheck(board2, '02')); //=> should equal true
+debug(boardCheck(board3, '00')); //=> should equal true
+debug(boardCheck(board4, '00')); //=> should equal false
+debug(boardCheck(board5, '00')); //=> should equal tie
+debug(boardCheck(board6, '02')); //=> should equal true
+debug(boardCheck(board7, '02')); //=> should equal true
 
-module.exports = boardCheck
-// debug(boardCheck(board1, '02'));
-// debug(boardCheck(board2, '02'));
-// debug(boardCheck(board3, '00'));
-// debug(boardCheck(board4));
-// debug(boardCheck(board5));
-// debug(boardCheck(board6, '02'));
-// debug(boardCheck(board7, '02'));
+*END TEST* 
+*/
 
