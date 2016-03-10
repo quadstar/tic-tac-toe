@@ -8,9 +8,14 @@ var Square = React.createClass({
   getInitialState: function(){
     return {};
   },
+  clickInvalid: function(){
+    alert('You can\'t play there!');
+  },
   render: function(){
+    var clickfn = this.props.marker === ' ' ? this.props.clickSquare : this.clickInvalid;
+    var styleClass = classNames('square', this.props.marker === ' ' ? 'empty': 'filled');   
     return (
-      <div className='square' onClick={this.props.clickSquare} id={this.props.id}>
+      <div className={styleClass} onClick={clickfn} id={this.props.id}>
         {this.props.marker}
       </div>
     )
