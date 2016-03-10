@@ -10,8 +10,8 @@ app.use(bodyParser.json());
 
 // route to check board for win condition. 
 app.post('/api/board-check', function(req, res){
-  boardCheck(req.body.rows, req.body.played);
-  res.status(200).send('k man');
+  var result = boardCheck(req.body.rows, req.body.played);
+  res.status(200).send(result);
 });
 
 // convert jsx to js and bundle files
