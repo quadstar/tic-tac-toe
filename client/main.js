@@ -4,6 +4,34 @@ classNames = require('classnames');
 $ = require('jquery');
 var domContainerNode = document.getElementById('content');
 
+var NewGame = React.createClass({
+  getInitialState: function(){
+    return {boardSize: '3'};
+  },
+  setBoardSize: function(event){
+    this.setState({
+      boardSize: event.target.value
+    });
+    this.props.createNewGame(event.target.value);
+  },
+  createNewGame: function(){
+    this.props.createNewGame(this.state.boardSize);
+  },
+  render: function(){
+    return (
+      <div>
+        Board Size: <select value={this.state.boardSize} onChange={this.setBoardSize}>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <br />
+        <span className="new-button" onClick={this.createNewGame}> New Game </span>
+      </div>
+    )
+  }
+});
+
 var Square = React.createClass({
   getInitialState: function(){
     return {};
@@ -29,15 +57,32 @@ var Main = React.createClass({
       rows: [[' ',' ',' '],[' ',' ',' '],[' ',' ',' ']]
     };
   },
+  // updates marker at square clicked, checks for win condition, changes player turn.
   clickSquare: function(event){
     console.log('Clicked square #', event.target.id); 
     var row = parseInt(event.target.id[0]);
     var col = parseInt(event.target.id[1]);
     var newRows = this.state.rows.slice();
     newRows[row][col] = this.state.turn;
+    // TODO: check for win condition
     this.setState({
       turn: this.state.turn === 'X' ? 'O' : 'X',
       rows: newRows
+    });
+  },
+  createNewGame: function(boardSize){
+    // creates an n x n matrix based on selected board size.
+    var rows = [];
+    for(var i = 0; i < boardSize; i++){
+      var row = [];
+      for(var k = 0; k < boardSize; k++){
+        row.push(' ');
+      }
+      rows.push(row);
+    }
+    this.setState({
+      turn: 'X',
+      rows: rows
     });
   },
   render: function(){
@@ -53,6 +98,7 @@ var Main = React.createClass({
             </div> 
           );
         })}
+        <NewGame createNewGame={this.createNewGame} />
       </div>
     );
   }
