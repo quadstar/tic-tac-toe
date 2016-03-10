@@ -1,7 +1,23 @@
 .square{
   width:100px;
   height:100px;
-  display:inline-block;
-  background-color:black;
-  margin:3px;
+  float:left;
+  position:relative;
+  border:2px solid black;
+  margin:2px;
+  padding:5px;
+  text-align:center;
+}
+
+.square:hover{
+  background-color:steelblue;
+  opacity:.5;
+}
+
+.row{
+  width:-moz-fit-content;
+  width:-webkit-fit-content;
+  width:fit-content;
+  margin-right:auto;
+  margin-left:auto;
 }
