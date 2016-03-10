@@ -70,7 +70,7 @@ var Main = React.createClass({
       url: '/api/board-check',
       method: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify(newRows),
+      data: JSON.stringify({played: event.target.id, rows:newRows}),
       success: function(data){
         console.log(data);
       }.bind(this)
