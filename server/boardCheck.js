@@ -4,8 +4,10 @@ var boardCheck = function(board, placedPiece){
 
   var rowWin = checkHorizontal(board[placedPiece[0]], player);
   var colWin = checkVertical(placedPiece[1], board, player);
+  var majDiagWin = checkMajorDiag(board, player);
+  var minDiagWin = checkMinorDiag(board, player);
 
-  return rowWin || colWin || false;
+  return rowWin || colWin || majDiagWin || minDiagWin || false;
 }
 
 var checkHorizontal = function(row, player){
@@ -23,16 +25,26 @@ var checkVertical = function(col, board, player){
       return false;
     }
   }
-
   return true;
 }
 
-var checkMajorDiag = function(diag, length, player){
+var checkMajorDiag = function(board, player){
 
+  for(var i = 0; i < board.length; i++){
+    if(board[i][i] !== player){
+      return false;
+    }
+  }
+  return true;
 }
 
-var checkMinorDiag = function(diag, length, player){
-
+var checkMinorDiag = function(board, player){
+  for(var i = 0, k = board.length; i < board.length; i++,k--){
+    if(board[i][k] !== player){
+      return false;
+    }
+  }
+  return true;
 }
 
 var checkBoardFilled = function(board){
@@ -64,8 +76,9 @@ var board6 = [ [ ' ', ' ', 'X' ], [ ' ', ' ', 'X' ], [ ' ', ' ', 'X' ] ]
 module.exports = boardCheck
 // debug(boardCheck(board1, '02'));
 // debug(boardCheck(board2, '02'));
-// debug(boardCheck(board3));
+// debug(boardCheck(board3, '00'));
 // debug(boardCheck(board4));
 // debug(boardCheck(board5));
 // debug(boardCheck(board6, '02'));
+// debug(boardCheck(board7, '02'));
 
